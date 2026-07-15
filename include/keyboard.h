@@ -117,5 +117,7 @@ typedef enum
 } VoxKey;
 
 VoxKey GetKey(XEvent *event);
+Bool IsKeyDown(XEvent *event, VoxKey key);
+Bool IsKeyUp(XEvent *event, VoxKey key);
 
 #endif

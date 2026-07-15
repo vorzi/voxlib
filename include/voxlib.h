@@ -6,6 +6,7 @@
 
 #include "keyboard.h"
 #include "window.h"
+#include "mouse.h"
 #include "event.h"
 #include "draw.h"
 

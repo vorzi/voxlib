@@ -127,3 +127,20 @@ VoxKey GetKey(XEvent *event)
             return KEY_UNKNOWN;
     }
 }
+
+/* Is Key Down or Up is check if is typing */
+Bool IsKeyDown(XEvent *event, VoxKey key)
+{
+    if (event->type != KeyPress)
+        return False;
+
+    return GetKey(event) == key;
+}
+
+Bool IsKeyUp(XEvent *event, VoxKey key)
+{
+    if (event->type != KeyRelease)
+        return False;
+
+    return GetKey(event) == key;
+}

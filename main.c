@@ -7,10 +7,28 @@ void onKey(VoxWindow *win, XEvent *event)
 
     puts("Tecla pressionada!");
 
+    if (IsKeyDown(event, key))
+    {
+        printf("Tecla %d pressionada.\n", key);
+    }
+
     if (key == KEY_Q) {
         puts("Tecla Q pressionada, saindo!");
         DestroyWindow(win);
-    };
+    }
+}
+
+void onMouse(VoxWindow *win, XEvent *event)
+{
+    if (IsMouseButtonDown(*win, Button1Mask))
+    {
+        puts("Segurando esquerdo");
+    }
+
+    VoxMousePosition mouse = GetMouse(*win);
+
+    printf("in root y -> %d, in root x -> %d\n", mouse.rootX, mouse.rootY);
+    printf("in screen y -> %d, in screen x -> %d\n", mouse.x, mouse.y);
 }
 
 void onDraw(VoxWindow *win, XEvent *event)
@@ -19,20 +37,13 @@ void onDraw(VoxWindow *win, XEvent *event)
 
     DrawClear(win);
 
-    // Preto
     DrawSetColor(
         win,
         BlackPixel(win->display, win->screen)
     );
 
-    // Pixel
-    DrawPixel(
-        win,
-        50,
-        50
-    );
+    DrawPixel(win, 50, 50);
 
-    // Linha
     DrawLine(
         win,
         100,
@@ -41,7 +52,6 @@ void onDraw(VoxWindow *win, XEvent *event)
         50
     );
 
-    // Retângulo vazio
     DrawRectangle(
         win,
         100,
@@ -51,7 +61,6 @@ void onDraw(VoxWindow *win, XEvent *event)
         0
     );
 
-    // Retângulo preenchido
     DrawRectangle(
         win,
         300,
@@ -61,7 +70,6 @@ void onDraw(VoxWindow *win, XEvent *event)
         1
     );
 
-    // Círculo vazio
     DrawCircle(
         win,
         100,
@@ -73,7 +81,6 @@ void onDraw(VoxWindow *win, XEvent *event)
         0
     );
 
-    // Círculo preenchido
     DrawCircle(
         win,
         350,
@@ -85,7 +92,6 @@ void onDraw(VoxWindow *win, XEvent *event)
         1
     );
 
-    // Texto
     DrawText(
         win,
         550,
@@ -93,13 +99,11 @@ void onDraw(VoxWindow *win, XEvent *event)
         "VoxLib Draw Test"
     );
 
-    // Vermelho
     DrawSetColor(
         win,
         0xff0000
     );
 
-    // Linha vermelha
     DrawLine(
         win,
         550,
@@ -118,7 +122,10 @@ int main()
         800,
         600,
         "Teste of Lib C!",
-        KeyPressMask | ExposureMask
+        KeyPressMask |
+        ExposureMask |
+        ButtonPressMask |
+        ButtonReleaseMask
     );
 
     if (!w)
@@ -137,6 +144,18 @@ int main()
         w,
         Expose,
         onDraw
+    );
+
+    CreateEvent(
+        w,
+        ButtonPress,
+        onMouse
+    );
+
+    CreateEvent(
+        w,
+        ButtonRelease,
+        onMouse
     );
 
     start(w);
