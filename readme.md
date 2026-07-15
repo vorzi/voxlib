@@ -10,7 +10,7 @@ X11Lib
 make all
 ```
 
-## Compiled example
+## Compiled example:
 
 ![cool](/image.webp)
 - This lib still at development, so some things can change

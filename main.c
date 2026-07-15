@@ -3,9 +3,14 @@
 
 void onKey(VoxWindow *win, XEvent *event)
 {
-    (void)event;
+    VoxKey key = GetKey(event);
 
-    printf("Tecla pressionada! -> %u\n", event->xkey.keycode);
+    puts("Tecla pressionada!");
+
+    if (key == KEY_Q) {
+        puts("Tecla Q pressionada, saindo!");
+        DestroyWindow(win);
+    };
 }
 
 void onDraw(VoxWindow *win, XEvent *event)
