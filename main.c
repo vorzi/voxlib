@@ -1,6 +1,8 @@
 #include "voxlib.h"
 #include <stdio.h>
 
+int i = 0;
+
 void onKey(VoxWindow *win, XEvent *event)
 {
     VoxKey key = GetKey(event);
@@ -30,6 +32,14 @@ void onKey(VoxWindow *win, XEvent *event)
     if (key == KEY_O) {
         puts("Tecla P pressionada, Mostrando Cursor");
         ShowCursor(*win);
+    }
+
+    if (key == KEY_I) {
+        puts("Tecla I pressionada, Mudando Cursor");
+
+        if (i > 137) i=0;
+        ChangeCursor(*win, i);
+        i++;
     }
 }
 

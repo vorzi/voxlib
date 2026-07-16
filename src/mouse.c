@@ -102,3 +102,9 @@ void ShowCursor(VoxWindow win)
     XUndefineCursor(win.display, win.window);
     XFlush(win.display);
 }
+
+void ChangeCursor(VoxWindow win, unsigned int Arrow)
+{
+    Cursor c = XCreateFontCursor(win.display, Arrow);
+    XDefineCursor(win.display, win.window, c);
+};
