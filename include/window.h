@@ -23,8 +23,8 @@ typedef struct VoxWindow
 } VoxWindow;
 
 VoxWindow *CreateWindow(int w, int h, const char *title, long perm);
+void SetWindowBackground(VoxWindow *win, unsigned long color);
 void DestroyWindow(VoxWindow *win);
-
 void start(VoxWindow *win);
 
 #endif

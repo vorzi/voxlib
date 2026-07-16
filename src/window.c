@@ -68,3 +68,14 @@ void DestroyWindow(VoxWindow *win)
 
     free(win);
 }
+
+void SetWindowBackground(VoxWindow *win, unsigned long color)
+{
+    XSetWindowBackground(
+        win->display,
+        win->window,
+        color
+    );
+
+    XFlush(win->display);
+}

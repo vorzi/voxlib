@@ -2,6 +2,7 @@
 #include <stdio.h>
 
 int i = 0;
+int b = 0;
 
 void onKey(VoxWindow *win, XEvent *event)
 {
@@ -30,21 +31,42 @@ void onKey(VoxWindow *win, XEvent *event)
     }
 
     if (key == KEY_O) {
-        puts("Tecla P pressionada, Mostrando Cursor");
+        puts("Tecla O pressionada, Mostrando Cursor");
         ShowCursor(*win);
     }
 
     if (key == KEY_I) {
-        puts("Tecla I pressionada, Mudando Cursor");
 
-        if (i > 137) i=0;
+        if (i > 137)
+            i = 0;
+
+        printf("Tecla I pressionada, Mudando Cursor, indo de %d -> %d\n", i - 1, i);
         ChangeCursor(*win, i);
         i++;
+    }
+
+    if (key == KEY_B) {
+        b = !b;
+
+        printf("Fundo: %s\n", b ? "Preto" : "Branco");
+
+        /* força um evento Expose para chamar onDraw() */
+        XClearArea(
+            win->display,
+            win->window,
+            0,
+            0,
+            0,
+            0,
+            True
+        );
     }
 }
 
 void onMouse(VoxWindow *win, XEvent *event)
 {
+    (void)event;
+
     if (IsMouseButtonDown(*win, Button1Mask))
     {
         puts("Segurando esquerdo");
@@ -52,48 +74,31 @@ void onMouse(VoxWindow *win, XEvent *event)
 
     VoxMousePosition mouse = GetMouse(*win);
 
-    printf("in root y -> %d, in root x -> %d\n", mouse.rootX, mouse.rootY);
-    printf("in screen y -> %d, in screen x -> %d\n", mouse.x, mouse.y);
+    printf("root: (%d, %d)\n", mouse.rootX, mouse.rootY);
+    printf("window: (%d, %d)\n", mouse.x, mouse.y);
 }
 
 void onDraw(VoxWindow *win, XEvent *event)
 {
     (void)event;
 
+    if (b) {
+        SetWindowBackground(win, BlackPixel(win->display, win->screen)); 
+        DrawSetColor(win, WhitePixel(win->display, win->screen));
+    } else {
+        SetWindowBackground(win, WhitePixel(win->display, win->screen)); 
+        DrawSetColor(win, BlackPixel(win->display, win->screen));
+    }
     DrawClear(win);
 
-    DrawSetColor(
-        win,
-        BlackPixel(win->display, win->screen)
-    );
 
     DrawPixel(win, 50, 50);
 
-    DrawLine(
-        win,
-        100,
-        50,
-        250,
-        50
-    );
+    DrawLine(win, 100, 50, 250, 50);
 
-    DrawRectangle(
-        win,
-        100,
-        100,
-        150,
-        100,
-        0
-    );
+    DrawRectangle(win, 100, 100, 150, 100, 0);
 
-    DrawRectangle(
-        win,
-        300,
-        100,
-        150,
-        100,
-        1
-    );
+    DrawRectangle(win, 300, 100, 150, 100, 1);
 
     DrawCircle(
         win,
@@ -124,10 +129,18 @@ void onDraw(VoxWindow *win, XEvent *event)
         "VoxLib Draw Test"
     );
 
-    DrawSetColor(
+    
+    DrawText(
         win,
-        0xff0000
+        576,
+        260,
+        "Yeah! Catholicism good!"
     );
+    
+    DrawLine(win, 630, 190, 630, 230);
+    DrawLine(win, 618, 205, 642, 205);
+    
+    DrawSetColor(win, 0xff0000);
 
     DrawLine(
         win,
@@ -136,12 +149,12 @@ void onDraw(VoxWindow *win, XEvent *event)
         750,
         150
     );
-
+    
     DrawSync(win);
     DrawRefresh(win);
 }
 
-int main()
+int main(void)
 {
     VoxWindow *w = CreateWindow(
         800,
@@ -159,29 +172,10 @@ int main()
         return 1;
     }
 
-    CreateEvent(
-        w,
-        KeyPress,
-        onKey
-    );
-
-    CreateEvent(
-        w,
-        Expose,
-        onDraw
-    );
-
-    CreateEvent(
-        w,
-        ButtonPress,
-        onMouse
-    );
-
-    CreateEvent(
-        w,
-        ButtonRelease,
-        onMouse
-    );
+    CreateEvent(w, KeyPress, onKey);
+    CreateEvent(w, Expose, onDraw);
+    CreateEvent(w, ButtonPress, onMouse);
+    CreateEvent(w, ButtonRelease, onMouse);
 
     start(w);
 
