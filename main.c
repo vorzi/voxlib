@@ -16,6 +16,21 @@ void onKey(VoxWindow *win, XEvent *event)
         puts("Tecla Q pressionada, saindo!");
         DestroyWindow(win);
     }
+
+    if (key == KEY_M) {
+        puts("Tecla M pressionada, movendo!");
+        MoveCursor(*win, 100, 100);
+    }
+
+    if (key == KEY_P) {
+        puts("Tecla P pressionada, Escondendo Cursor");
+        HideCursor(*win);
+    }
+
+    if (key == KEY_O) {
+        puts("Tecla P pressionada, Mostrando Cursor");
+        ShowCursor(*win);
+    }
 }
 
 void onMouse(VoxWindow *win, XEvent *event)

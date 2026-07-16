@@ -20,6 +20,9 @@ typedef struct
 } VoxMousePosition;
 
 int IsMouseButtonDown(VoxWindow win, VoxMouseButton button);
+void MoveCursor(VoxWindow win, int x, int y);
 VoxMousePosition GetMouse(VoxWindow win);
+void HideCursor(VoxWindow win);
+void ShowCursor(VoxWindow win);
 
 #endif
